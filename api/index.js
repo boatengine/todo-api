@@ -1,22 +1,38 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
+const dotenv = require('dotenv')
+
+dotenv.config()
 const app = express();
 const PORT = 3000;
 
-require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
+
+
 const initMySQL = async () => {
-  conn = await mysql.createConnection({
-    host: process.env.DBHOST,
-    user: process.env.DBUSER,
-    password: process.env.DBPASS,
-    database: process.env.DBNAME,
-    port: process.env.DBPORT,
-  });
+  try{
+    conn = await mysql.createConnection({
+      host: process.env.DBHOST,
+      user: process.env.DBUSER,
+      password: process.env.DBPASS,
+      database: process.env.DBNAME,
+      port: process.env.DBPORT,
+    });
+  }catch(error) {
+    console.log(error)
+  }
+
 };
+
+app.use(async(req,res,next) => {
+  if(!conn) {
+    await initMySQL();
+  }
+  next();
+})
 // Path Get all data
 app.get("/todos", async (req, res) => {
   const result = await conn.query("SELECT * FROM todos");
