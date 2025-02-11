@@ -19,19 +19,19 @@ const initMySQL = async () => {
 };
 // Path Get all data
 app.get("/todos", async (req, res) => {
-  const result = await conn.query("SELECT * FROM mock");
+  const result = await conn.query("SELECT * FROM todos");
   res.json(result[0]);
 });
 
 app.get("/todos/:id", async (req, res) => {
   let id_p = parseInt(req.params.id);
-  const result = await conn.query("SELECT * FROM mock WHERE id = ?", id_p);
+  const result = await conn.query("SELECT * FROM todos WHERE id = ?", id_p);
   res.json(result[0][0]);
 });
 
 app.post("/todos", async (req, res) => {
   let body = req.body;
-  const result = await conn.query("INSERT INTO mock SET ?", body);
+  const result = await conn.query("INSERT INTO todos SET ?", body);
   res.status(200).json({
     name: body.name,
     status: body.status,
@@ -42,7 +42,7 @@ app.post("/todos", async (req, res) => {
 app.put("/todos/:id", async (req, res) => {
   let id = parseInt(req.params.id);
   let body = req.body;
-  const result = await conn.query("UPDATE mock SET ? WHERE id = ?", [body, id]);
+  const result = await conn.query("UPDATE todos SET ? WHERE id = ?", [body, id]);
   res.status(200).json({
     Message: "update is ok",
     data: result[0],
@@ -50,7 +50,7 @@ app.put("/todos/:id", async (req, res) => {
 });
 app.delete("/todos/:id", async (req, res) => {
   let id = parseInt(req.params.id);
-  const result = await conn.query("DELETE FROM mock WHERE id = ?", id);
+  const result = await conn.query("DELETE FROM todos WHERE id = ?", id);
   res.status(200).json({
     Message: "deleted now!!!",
     data: result[0],
