@@ -57,9 +57,9 @@ app.delete("/todos/:id", async (req, res) => {
   });
 });
 
-// app.listen(PORT, async () => {
-//   await initMySQL();
-//   console.log(`Server runing on port ${PORT}`);
-// });
+app.listen(PORT, async () => {
+  await initMySQL();
+  console.log(`Server runing on port ${PORT}`);
+});
 
 module.exports = app;
